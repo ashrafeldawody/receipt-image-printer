@@ -1,0 +1,27 @@
+{
+  "name": "receipt-image-printer",
+  "version": "1.0.0",
+  "description": "Convert receipts to images for thermal printers - supports any language including Arabic, Chinese, Turkish, etc. via image rendering",
+  "main": "src/index.js",
+  "type": "module",
+  "keywords": ["thermal", "receipt", "printer", "escpos", "arabic", "chinese", "turkish", "image", "80mm", "pos", "multilingual"],
+  "author": "Ashraf Eldawody <ashraf6450@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ashraf6450/receipt-image-printer.git"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "@node-escpos/core": "^0.6.0",
+    "@node-escpos/usb-adapter": "^0.3.1",
+    "canvas": "^3.2.0",
+    "jsbarcode": "^3.12.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "example": "node examples/basic.js"
+  }
+}

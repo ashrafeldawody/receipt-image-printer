@@ -1,0 +1,6 @@
+examples/
+*.png
+print.js
+node_modules/
+.git/
+.gitignore

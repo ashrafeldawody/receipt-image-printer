@@ -35,12 +35,10 @@ yPos += 65;
 
 // Store info (much larger)
 ctx.font = 'bold 28px Arial';
-ctx.fillText("Big Shop Store", receiptWidth / 2, yPos);
+ctx.fillText("شارع الهرم، الجيزة", receiptWidth / 2, yPos);
 yPos += 40;
 ctx.font = 'bold 24px Arial';
-ctx.fillText("123 Main Street, Cairo", receiptWidth / 2, yPos);
-yPos += 35;
-ctx.fillText("Tel: +20 123 456 7890", receiptWidth / 2, yPos);
+ctx.fillText("هاتف: ٠١٢٣٤٥٦٧٨٩٠", receiptWidth / 2, yPos);
 yPos += 45;
 
 // Divider line (thicker)
@@ -53,12 +51,12 @@ yPos += 35;
 
 // Receipt info (much larger)
 ctx.font = 'bold 26px Arial';
-ctx.textAlign = 'left';
-ctx.fillText("Date: 2025-10-01 14:30", 10, yPos);
+ctx.textAlign = 'right';
+ctx.fillText("التاريخ: ٢٠٢٥-١٠-٠١ ١٤:٣٠", receiptWidth - 10, yPos);
 yPos += 32;
-ctx.fillText("Receipt #: 1234567", 10, yPos);
+ctx.fillText("رقم الفاتورة: ١٢٣٤٥٦٧", receiptWidth - 10, yPos);
 yPos += 32;
-ctx.fillText("Cashier: Ahmed", 10, yPos);
+ctx.fillText("الكاشير: أحمد", receiptWidth - 10, yPos);
 yPos += 35;
 
 // Divider (thicker)
@@ -71,12 +69,13 @@ yPos += 35;
 
 // Items header (much larger and bolder)
 ctx.font = 'bold 28px Arial';
-ctx.fillText("Item", 10, yPos);
-ctx.textAlign = 'center';
-ctx.fillText("Qty", receiptWidth / 2 - 30, yPos);
-ctx.fillText("Price", receiptWidth / 2 + 50, yPos);
 ctx.textAlign = 'right';
-ctx.fillText("Total", receiptWidth - 10, yPos);
+ctx.fillText("الصنف", receiptWidth - 10, yPos);
+ctx.textAlign = 'center';
+ctx.fillText("الكمية", receiptWidth / 2 + 50, yPos);
+ctx.fillText("السعر", receiptWidth / 2 - 30, yPos);
+ctx.textAlign = 'left';
+ctx.fillText("المجموع", 10, yPos);
 yPos += 35;
 
 // Divider
@@ -87,34 +86,36 @@ ctx.lineTo(receiptWidth - 10, yPos);
 ctx.stroke();
 yPos += 35;
 
+// Helper function to convert numbers to Arabic-Indic numerals
+function toArabicNumerals(num) {
+  const arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+  return num.toString().replace(/\d/g, d => arabicNumerals[d]);
+}
+
 // Items
 const items = [
-  { name: "كولا", nameEn: "Cola", qty: 2, price: 5.00 },
-  { name: "خبز", nameEn: "Bread", qty: 1, price: 3.50 },
-  { name: "حليب", nameEn: "Milk", qty: 3, price: 8.00 },
-  { name: "شاي", nameEn: "Tea", qty: 1, price: 12.00 },
-  { name: "قهوة", nameEn: "Coffee", qty: 2, price: 25.00 }
+  { name: "كولا", qty: 2, price: 5.00 },
+  { name: "خبز", qty: 1, price: 3.50 },
+  { name: "حليب", qty: 3, price: 8.00 },
+  { name: "شاي", qty: 1, price: 12.00 },
+  { name: "قهوة", qty: 2, price: 25.00 }
 ];
 
 ctx.font = 'bold 28px Arial';
 items.forEach(item => {
-  ctx.textAlign = 'left';
-  ctx.direction = 'rtl';
-  ctx.fillText(item.name, 10, yPos);
-  ctx.direction = 'ltr';
-  ctx.font = 'bold 22px Arial';
-  ctx.fillText(item.nameEn, 10, yPos + 28);
-
-  ctx.font = 'bold 28px Arial';
-  ctx.textAlign = 'center';
-  ctx.fillText(item.qty.toString(), receiptWidth / 2 - 30, yPos);
-  ctx.fillText(`${item.price.toFixed(2)}`, receiptWidth / 2 + 50, yPos);
-
+  // Arabic text - align right
   ctx.textAlign = 'right';
-  const total = item.qty * item.price;
-  ctx.fillText(`${total.toFixed(2)}`, receiptWidth - 10, yPos);
+  ctx.fillText(item.name, receiptWidth - 10, yPos);
 
-  yPos += 55;
+  ctx.textAlign = 'center';
+  ctx.fillText(toArabicNumerals(item.qty), receiptWidth / 2 + 50, yPos);
+  ctx.fillText(toArabicNumerals(item.price.toFixed(2)), receiptWidth / 2 - 30, yPos);
+
+  ctx.textAlign = 'left';
+  const total = item.qty * item.price;
+  ctx.fillText(toArabicNumerals(total.toFixed(2)), 10, yPos);
+
+  yPos += 45;
 });
 
 yPos += 15;
@@ -129,18 +130,14 @@ yPos += 35;
 
 // Subtotal
 ctx.font = 'bold 30px Arial';
-ctx.textAlign = 'left';
-ctx.fillText("Subtotal:", 10, yPos);
 ctx.textAlign = 'right';
-ctx.fillText("77.50", receiptWidth - 10, yPos);
+ctx.fillText("المجموع الفرعي: " + toArabicNumerals("77.50"), receiptWidth - 10, yPos);
 yPos += 35;
 
 // Tax
 ctx.font = 'bold 28px Arial';
-ctx.textAlign = 'left';
-ctx.fillText("Tax (14%):", 10, yPos);
 ctx.textAlign = 'right';
-ctx.fillText("10.85", receiptWidth - 10, yPos);
+ctx.fillText("الضريبة (٪١٤): " + toArabicNumerals("10.85"), receiptWidth - 10, yPos);
 yPos += 40;
 
 // Divider
@@ -153,10 +150,8 @@ yPos += 45;
 
 // Total
 ctx.font = 'bold 42px Arial';
-ctx.textAlign = 'left';
-ctx.fillText("TOTAL:", 10, yPos);
 ctx.textAlign = 'right';
-ctx.fillText("88.35 EGP", receiptWidth - 10, yPos);
+ctx.fillText("الإجمالي: " + toArabicNumerals("88.35") + " جنيه", receiptWidth - 10, yPos);
 yPos += 50;
 
 // Divider
@@ -169,21 +164,16 @@ yPos += 40;
 
 // Payment method
 ctx.font = 'bold 26px Arial';
-ctx.textAlign = 'left';
-ctx.fillText("Payment: Cash", 10, yPos);
+ctx.textAlign = 'right';
+ctx.fillText("طريقة الدفع: نقدي", receiptWidth - 10, yPos);
 yPos += 32;
-ctx.fillText("Change: 11.65 EGP", 10, yPos);
+ctx.fillText("الباقي: " + toArabicNumerals("11.65") + " جنيه", receiptWidth - 10, yPos);
 yPos += 50;
 
 // Thank you message
 ctx.font = 'bold 34px Arial';
 ctx.textAlign = 'center';
-ctx.direction = 'rtl';
 ctx.fillText("شكراً لزيارتكم", receiptWidth / 2, yPos);
-yPos += 45;
-ctx.direction = 'ltr';
-ctx.font = 'bold 28px Arial';
-ctx.fillText("Thank you for your visit!", receiptWidth / 2, yPos);
 yPos += 55;
 
 // Barcode (much larger)
@@ -200,7 +190,8 @@ yPos += 150;
 
 // Website
 ctx.font = 'bold 22px Arial';
-ctx.fillText("www.bigshop.com", receiptWidth / 2, yPos);
+ctx.textAlign = 'center';
+ctx.fillText("المتجر-الكبير.com", receiptWidth / 2, yPos);
 yPos += 50;
 
 // Trim canvas to actual content height

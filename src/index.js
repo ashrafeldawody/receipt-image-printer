@@ -300,6 +300,55 @@ export class ThermalReceiptPrinter {
   }
 
   /**
+   * Open cash drawer
+   * @param {Object} options - Drawer options
+   * @param {string} options.kickCode - Comma-separated kick code (e.g., "27,112,0,148,49")
+   * @param {number} options.pin - Pin number (default: 0, can be 0 or 1) - used if kickCode not provided
+   * @param {number} options.onTime - ON time in milliseconds (default: 120ms, max: 255ms) - used if kickCode not provided
+   * @param {number} options.offTime - OFF time in milliseconds (default: 240ms, max: 255ms) - used if kickCode not provided
+   */
+  async openCashDrawer(options = {}) {
+    return new Promise((resolve, reject) => {
+      const device = new USB();
+
+      device.open((err) => {
+        if (err) {
+          return reject(err);
+        }
+
+        try {
+          const printer = new Printer(device, {});
+
+          let kickCodeBuffer;
+
+          if (options.kickCode) {
+            // Parse comma-separated kick code
+            const codes = options.kickCode.split(',').map(code => parseInt(code.trim(), 10));
+            kickCodeBuffer = Buffer.from(codes);
+          } else {
+            // ESC/POS cash drawer command: ESC p m t1 t2
+            // ESC = 0x1B, p = 0x70
+            // m = pin (0 or 1)
+            // t1 = ON time (multiples of 2ms)
+            // t2 = OFF time (multiples of 2ms)
+            const pin = options.pin || 0;
+            const onTime = Math.min(Math.floor((options.onTime || 120) / 2), 255);
+            const offTime = Math.min(Math.floor((options.offTime || 240) / 2), 255);
+            kickCodeBuffer = Buffer.from([0x1B, 0x70, pin, onTime, offTime]);
+          }
+
+          printer.raw(kickCodeBuffer);
+          printer.close();
+
+          resolve({ success: true, message: 'Cash drawer opened successfully' });
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+  }
+
+  /**
    * Helper method to draw horizontal line
    */
   _drawLine(ctx, yPos, width = 2) {

@@ -4,7 +4,19 @@
   "description": "Convert receipts to images for thermal printers - supports any language including Arabic, Chinese, Turkish, etc. via image rendering",
   "main": "src/index.js",
   "type": "module",
-  "keywords": ["thermal", "receipt", "printer", "escpos", "arabic", "chinese", "turkish", "image", "80mm", "pos", "multilingual"],
+  "keywords": [
+    "thermal",
+    "receipt",
+    "printer",
+    "escpos",
+    "arabic",
+    "chinese",
+    "turkish",
+    "image",
+    "80mm",
+    "pos",
+    "multilingual"
+  ],
   "author": "Ashraf Eldawody <ashraf6450@gmail.com>",
   "license": "MIT",
   "repository": {
@@ -17,11 +29,12 @@
   "dependencies": {
     "@node-escpos/core": "^0.6.0",
     "@node-escpos/usb-adapter": "^0.3.1",
+    "axios": "^1.12.2",
     "canvas": "^3.2.0",
     "jsbarcode": "^3.12.1"
   },
-  "devDependencies": {},
   "scripts": {
-    "example": "node examples/basic.js"
+    "example": "node examples/basic.js",
+    "openDrawer": "node examples/cash-drawer.js"
   }
 }

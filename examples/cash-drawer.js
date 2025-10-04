@@ -1,4 +1,4 @@
-import ThermalReceiptPrinter from './src/index.js';
+const ThermalReceiptPrinter = require('../src/index.js');
 
 async function testCashDrawer() {
   const printer = new ThermalReceiptPrinter();

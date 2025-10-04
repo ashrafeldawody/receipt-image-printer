@@ -1,15 +1,15 @@
-import { Printer, Image } from "@node-escpos/core";
-import USB from "@node-escpos/usb-adapter";
-import { createCanvas } from "canvas";
-import { writeFileSync, unlinkSync } from "fs";
-import { join } from "path";
-import JsBarcode from "jsbarcode";
+const { Printer, Image } = require("@node-escpos/core");
+const USB = require("@node-escpos/usb-adapter");
+const { createCanvas } = require("canvas");
+const { writeFileSync, unlinkSync } = require("fs");
+const { join } = require("path");
+const JsBarcode = require("jsbarcode");
 
 /**
  * Thermal Receipt Printer SDK
  * Generates and prints receipts for 80mm ESC/POS thermal printers with Arabic support
  */
-export class ThermalReceiptPrinter {
+class ThermalReceiptPrinter {
   constructor(options = {}) {
     this.width = options.width || 512; // 80mm thermal printer width
     this.tempDir = options.tempDir || process.cwd();
@@ -360,4 +360,5 @@ export class ThermalReceiptPrinter {
   }
 }
 
-export default ThermalReceiptPrinter;
+module.exports = ThermalReceiptPrinter;
+module.exports.ThermalReceiptPrinter = ThermalReceiptPrinter;

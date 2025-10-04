@@ -1,9 +1,9 @@
-import { Printer, Image } from "@node-escpos/core";
-import USB from "@node-escpos/usb-adapter";
-import { join } from "path";
-import { createCanvas, loadImage } from "canvas";
-import { writeFileSync } from "fs";
-import JsBarcode from "jsbarcode";
+const { Printer, Image } = require("@node-escpos/core");
+const USB = require("@node-escpos/usb-adapter");
+const { join } = require("path");
+const { createCanvas, loadImage } = require("canvas");
+const { writeFileSync } = require("fs");
+const JsBarcode = require("jsbarcode");
 
 // 80mm thermal printer = 512 pixels (most common for ESC/POS)
 const receiptWidth = 512;

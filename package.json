@@ -3,7 +3,7 @@
   "version": "1.2.0",
   "description": "Convert receipts to images for thermal printers - supports any language including Arabic, Chinese, Turkish, etc. via image rendering",
   "main": "src/index.js",
-  "type": "module",
+  "type": "commonjs",
   "keywords": [
     "thermal",
     "receipt",

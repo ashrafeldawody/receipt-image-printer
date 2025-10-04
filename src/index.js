@@ -255,6 +255,9 @@ class ThermalReceiptPrinter {
    * Print receipt to USB thermal printer
    * @param {Object} receiptData - Receipt configuration
    * @param {Object} options - Print options
+   * @param {boolean} options.openDrawer - Whether to open cash drawer after printing (default: false)
+   * @param {string} options.kickCode - Custom kick code for drawer (e.g., "27,112,0,148,49")
+   * @param {string} options.density - Print density (default: 'd24')
    */
   async print(receiptData, options = {}) {
     return new Promise((resolve, reject) => {
@@ -277,6 +280,20 @@ class ThermalReceiptPrinter {
           let printer = new Printer(device, {});
           printer.align("ct");
           printer = await printer.image(await Image.load(tempFile), options.density || 'd24');
+
+          // Open cash drawer if requested
+          if (options.openDrawer) {
+            let kickCodeBuffer;
+            if (options.kickCode) {
+              const codes = options.kickCode.split(',').map(code => parseInt(code.trim(), 10));
+              kickCodeBuffer = Buffer.from(codes);
+            } else {
+              // Default ESC/POS drawer command
+              kickCodeBuffer = Buffer.from([0x1B, 0x70, 0, 60, 120]);
+            }
+            printer.raw(kickCodeBuffer);
+          }
+
           printer.cut().close();
 
           // Clean up

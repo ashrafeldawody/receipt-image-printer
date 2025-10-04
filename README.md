@@ -21,6 +21,7 @@ This library **renders everything as an image**, so any language that can be dis
 - ✅ 80mm thermal printer support (ESC/POS)
 - ✅ Generate receipt images (PNG buffer)
 - ✅ Direct USB printing
+- ✅ **Cash drawer control** - Open drawer with custom kick codes
 - ✅ Barcode support (CODE128, EAN13, etc.)
 - ✅ Customizable layout
 - ✅ TypeScript definitions included
@@ -39,7 +40,7 @@ npm install receipt-image-printer
 ## Quick Start
 
 ```javascript
-import ThermalReceiptPrinter from 'receipt-image-printer';
+const ThermalReceiptPrinter = require('receipt-image-printer');
 
 const printer = new ThermalReceiptPrinter();
 
@@ -79,6 +80,9 @@ const receiptData = {
 // Print to USB thermal printer
 await printer.print(receiptData);
 
+// Print and open cash drawer
+await printer.print(receiptData, { openDrawer: true });
+
 // Get image buffer (for preview/display)
 const imageBuffer = printer.getImage(receiptData);
 ```
@@ -105,8 +109,23 @@ Prints receipt to USB thermal printer.
 - `receiptData` (ReceiptData): Receipt configuration object
 - `options` (PrintOptions): Print options
   - `density` ('s8' | 's24' | 'd8' | 'd24'): Print density. Default: 'd24'
+  - `openDrawer` (boolean): Open cash drawer after printing. Default: false
+  - `kickCode` (string): Custom kick code for drawer (e.g., "27,112,0,148,49")
 
 **Returns:** `Promise<PrintResult>`
+
+#### `openCashDrawer(options)`
+
+Opens cash drawer without printing.
+
+**Parameters:**
+- `options` (DrawerOptions): Drawer options
+  - `kickCode` (string): Custom kick code (e.g., "27,112,0,148,49")
+  - `pin` (number): Pin number (0 or 1). Default: 0
+  - `onTime` (number): ON time in milliseconds. Default: 120ms
+  - `offTime` (number): OFF time in milliseconds. Default: 240ms
+
+**Returns:** `Promise<{ success: boolean, message: string }>`
 
 #### `getImage(receiptData)`
 
@@ -174,7 +193,7 @@ interface ReceiptData {
 ### Print Receipt
 
 ```javascript
-import ThermalReceiptPrinter from 'receipt-image-printer';
+const ThermalReceiptPrinter = require('receipt-image-printer');
 
 const printer = new ThermalReceiptPrinter();
 
@@ -188,6 +207,9 @@ const receiptData = {
 
 // Print to thermal printer
 await printer.print(receiptData);
+
+// Print and open cash drawer
+await printer.print(receiptData, { openDrawer: true });
 ```
 
 ### Get Image Buffer (for preview/display)
@@ -198,8 +220,27 @@ const imageBuffer = printer.getImage(receiptData);
 
 // Use in web server, display in UI, etc.
 // Or save to file if needed
-import { writeFileSync } from 'fs';
+const { writeFileSync } = require('fs');
 writeFileSync('./preview.png', imageBuffer);
+```
+
+### Open Cash Drawer
+
+```javascript
+// Open with default settings
+await printer.openCashDrawer();
+
+// Open with custom kick code
+await printer.openCashDrawer({
+  kickCode: '27,112,0,148,49'
+});
+
+// Open with custom timing
+await printer.openCashDrawer({
+  pin: 0,
+  onTime: 120,
+  offTime: 240
+});
 ```
 
 ### Print with Custom Density
